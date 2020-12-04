@@ -1,4 +1,6 @@
 import pygame
+import numpy as np
+
 
 width = height = 512
 dimension = 8
@@ -13,7 +15,12 @@ def loadimage():
 
 class ChessEngine:
     def __init__(self):
-        self.board =
+        white_pieces = ['wR', 'wN', 'bK', 'wQ', 'wK', 'bK', 'wN', 'wR']
+        white_pawns = ['wp' for i in range(8)]
+        black_pawns = ['bp' for i in range(8)]
+        blank = ['--' for i in range(8)]
+        black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
+        self.board = np.array([[black_pieces],[black_pawns],[blank],[blank],[blank],[blank],[white_pawns],[white_pieces]])
 
 
 def main():
@@ -32,7 +39,19 @@ def main():
         clock.tick(fps)
         pygame.display.flip()
 
-def draw_game(screen, state):
+def draw_game(screen, gamestate):
+    draw_squares(screen)
+
+    draw_pieces(screen, gamestate.board)
+
+def draw_squares(screen):
+    colors = [pygame.Color('white'), pygame.Color('black')]
+    for i in range(dimension):
+        for z in range(dimension):
+            color = colors[((i+z) % 2)]
+            pygame.draw.rect(screen, color, pygame.Rect(i*SQ_SIZE, z*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+def draw_pieces(screen, board):
     pass
 
 if __name__ == '__main__':
