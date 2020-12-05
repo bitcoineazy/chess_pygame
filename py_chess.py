@@ -7,6 +7,7 @@ dimension = 8
 SQ_SIZE = height // dimension
 fps = 30
 images = {}
+
 def loadimage():
     figures = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
     for role in figures:
@@ -22,6 +23,10 @@ class ChessEngine:
         black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
         self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
 
+    def make_move(self, start, end):
+        board = chess.Board()
+        print(board, start, end)
+
 class Move:
     def __init__(self):
         pass
@@ -35,6 +40,8 @@ def main():
     gamestate = ChessEngine()
     loadimage()
     running = True
+    sq_selected = () # выбранная область
+    moves = [] #[(x,y),(x,y)] - координаты хода
     while running:
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
@@ -43,6 +50,19 @@ def main():
                 location = pygame.mouse.get_pos() # x,y
                 column = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
+                if sq_selected == (row, column): #если кликлун туда же
+                    sq_selected = () #очистить выбор
+                    moves = [] #очистить ходы
+                else:
+                    sq_selected = (row, column)
+                    moves.append(sq_selected) #добавляем 1 и 2 клики
+                print(sq_selected, moves)
+                if len(moves) % 2 == 0: #после хода белых и черных
+                    start = moves[0]
+                    end = moves[1]
+                    gamestate.make_move(start, end)
+
+
 
         draw_game(screen, gamestate)
         clock.tick(fps)
@@ -66,6 +86,11 @@ def draw_pieces(screen, board):
             piece = board[i][z]
             if piece != '--':
                 screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)) #блиттинг (копирование битов) изображения в опр позицию
+
+'''def chess_lib(square, moves):
+    board = chess.Board()
+    piece_cords = 1
+    is_legal = 1'''
 
 if __name__ == '__main__':
     main()
