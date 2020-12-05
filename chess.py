@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-
+import chess
 
 width = height = 512
 dimension = 8
@@ -15,12 +15,12 @@ def loadimage():
 
 class ChessEngine:
     def __init__(self):
-        white_pieces = ['wR', 'wN', 'bK', 'wQ', 'wK', 'bK', 'wN', 'wR']
+        white_pieces = ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
         white_pawns = ['wp' for i in range(8)]
         black_pawns = ['bp' for i in range(8)]
         blank = ['--' for i in range(8)]
         black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
-        self.board = np.array([[black_pieces],[black_pawns],[blank],[blank],[blank],[blank],[white_pawns],[white_pieces]])
+        self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
 
 
 def main():
@@ -45,14 +45,18 @@ def draw_game(screen, gamestate):
     draw_pieces(screen, gamestate.board)
 
 def draw_squares(screen):
-    colors = [pygame.Color('white'), pygame.Color('black')]
+    colors = [pygame.Color('white'), pygame.Color('gray')]
     for i in range(dimension):
         for z in range(dimension):
             color = colors[((i+z) % 2)]
-            pygame.draw.rect(screen, color, pygame.Rect(i*SQ_SIZE, z*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+            pygame.draw.rect(screen, color, pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 def draw_pieces(screen, board):
-    pass
+    for i in range(dimension):
+        for z in range(dimension):
+            piece = board[i][z]
+            if piece != '--':
+                screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 if __name__ == '__main__':
     main()
