@@ -6,13 +6,15 @@ board = chess.Board()
 print(board.turn)
 print(board.fullmove_number)
 
-move = chess.Move.from_uci("g1f3")
+
+
+move = chess.Move(start, end)
 move1 = chess.Move.from_uci('a7a6')
 
 print(board.legal_moves)
-print(move in board.legal_moves)
-if move in board.legal_moves:
-    board.push(move)
+'''print(move in board.legal_moves)'''
+'''if move in board.legal_moves:
+    board.push(move)'''
 if move1 in board.legal_moves:
     board.push(move1)
 print(board)
@@ -23,7 +25,7 @@ print(board.fullmove_number)
 print(board.turn)
 print(chess.A1)
 print(board.peek())
-print(list(board))
+
 '''
 >>> board = chess.Board()
 >>> board.legal_moves.count()
