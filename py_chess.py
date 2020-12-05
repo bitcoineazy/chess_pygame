@@ -19,14 +19,17 @@ class ChessEngine:
         white_pieces = ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
         white_pawns = ['wp' for i in range(8)]
         black_pawns = ['bp' for i in range(8)]
-        blank = ['--' for i in range(8)]
+        blank1 = ['--' for i in range(8)]
+        blank2 = ['--' for i in range(8)]
+        blank3 = ['--' for i in range(8)]
+        blank4 = ['--' for i in range(8)]
         black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
         #self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
-        self.board = [black_pieces, black_pawns, blank, blank, blank, blank, white_pawns, white_pieces]
+        self.board = [black_pieces, black_pawns, blank1, blank2, blank3, blank4, white_pawns, white_pieces]
         self.move_log = []
     def make_move(self, start, end):
-        board = chess.Board()
-        print(board, start, end)
+        #board = chess.Board()
+        #print(board, start, end)
         start_row = start[0]
         start_column = start[1]
         end_row = end[0]
@@ -35,7 +38,6 @@ class ChessEngine:
         #piece_captured = self.board[end_row][end_column]
         self.board[start_row][start_column] = '--'
         self.board[end_row][end_column] = piece_moved
-
         self.move_log.append(self.notation(start, end))
         print(self.move_log)
 
@@ -78,7 +80,7 @@ def main():
             if i.type == pygame.QUIT:
                 running = False
             elif i.type == pygame.MOUSEBUTTONDOWN:
-                location = pygame.mouse.get_pos() # x,y
+                location = pygame.mouse.get_pos() # (x,y)
                 column = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
                 if sq_selected == (row, column): #если кликлун туда же
@@ -90,6 +92,7 @@ def main():
                 print(sq_selected, moves)
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
+                    print(f'{start[0]} s')
                     end = moves[1]
                     gamestate.make_move(start, end)
                     sq_selected = ()
