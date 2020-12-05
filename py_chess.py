@@ -22,6 +22,10 @@ class ChessEngine:
         black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
         self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
 
+class Move:
+    def __init__(self):
+        pass
+
 
 def main():
     pygame.init()
@@ -35,6 +39,11 @@ def main():
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 running = False
+            elif i.type == pygame.MOUSEBUTTONDOWN:
+                location = pygame.mouse.get_pos() # x,y
+                column = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
+
         draw_game(screen, gamestate)
         clock.tick(fps)
         pygame.display.flip()
@@ -56,7 +65,7 @@ def draw_pieces(screen, board):
         for z in range(dimension):
             piece = board[i][z]
             if piece != '--':
-                screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+                screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)) #блиттинг (копирование битов) изображения в опр позицию
 
 if __name__ == '__main__':
     main()
