@@ -31,21 +31,6 @@ class ChessEngine:
         self.chess_table = chess.Board()
         self.chess_table.turn = True
 
-    def chess_engine(self, current_move):
-        '''uci_move_1 = chess.Move.from_uci(current_move)
-        print(current_move)
-        #uci_move_2 = self.move_log[1]
-
-
-        if uci_move_1 in self.chess_table.legal_moves:
-            self.chess_table.push(uci_move_1)
-        else:
-            print('нету в списке легал')
-        #if uci_move_2 in board.legal_moves:
-            #self.chess_table.push(uci_move_2)
-
-        print(self.chess_table)'''
-        pass
 
 
 
@@ -65,7 +50,8 @@ class ChessEngine:
         if not self.chess_table.is_game_over(claim_draw=True):
             '''checkmate, stalemate, insufficient material, the seventyfive-move rule, fivefold repetition or a variant end condition'''
             if uci_move_1 in self.chess_table.legal_moves:
-                self.board[start_row][start_column] = '--'
+                if not self.chess_table.is_castling(uci_move_1):
+                    self.board[start_row][start_column] = '--'
                 self.board[end_row][end_column] = piece_moved
                 #print(self.notation(start, end))
                 self.move_log.append(self.notation(start, end))
