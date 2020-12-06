@@ -27,37 +27,77 @@ class ChessEngine:
         #self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
         self.board = [black_pieces, black_pawns, blank1, blank2, blank3, blank4, white_pawns, white_pieces]
         self.move_log = []
+        self.chess = []
+        self.chess_table = chess.Board()
+        self.chess_table.turn = True
+
+    def chess_engine(self, current_move):
+        '''uci_move_1 = chess.Move.from_uci(current_move)
+        print(current_move)
+        #uci_move_2 = self.move_log[1]
+
+
+        if uci_move_1 in self.chess_table.legal_moves:
+            self.chess_table.push(uci_move_1)
+        else:
+            print('нету в списке легал')
+        #if uci_move_2 in board.legal_moves:
+            #self.chess_table.push(uci_move_2)
+
+        print(self.chess_table)'''
+        pass
+
+
+
+
+
     def make_move(self, start, end):
         #board = chess.Board()
         #print(board, start, end)
+        uci_move_1 = chess.Move.from_uci(self.notation(start, end))
+        print(self.notation(start, end))
         start_row = start[0]
         start_column = start[1]
         end_row = end[0]
         end_column = end[1]
         piece_moved = self.board[start_row][start_column]
         #piece_captured = self.board[end_row][end_column]
-        self.board[start_row][start_column] = '--'
-        self.board[end_row][end_column] = piece_moved
-        self.move_log.append(self.notation(start, end))
-        print(self.move_log)
+        if not self.chess_table.is_game_over(claim_draw=True):
+            '''checkmate, stalemate, insufficient material, the seventyfive-move rule, fivefold repetition or a variant end condition'''
+            if uci_move_1 in self.chess_table.legal_moves:
+                self.board[start_row][start_column] = '--'
+                self.board[end_row][end_column] = piece_moved
+                #print(self.notation(start, end))
+                self.move_log.append(self.notation(start, end))
+                print(self.move_log)
+                self.chess_table.push(uci_move_1)
+            else:
+                print('нету в списке легал')
+                print(self.chess_table.legal_moves)
+        else:
+            print('Игра окончена')
 
     def notation(self, start, end):
-        board_dict = {'a1': (7, 0), 'b1': 7, 'c1': 7, 'd1': 7, 'e1': 7, 'f1': 7, 'g1': 7, 'h1': 7, 'a2': (6, 0),
-                      'b2': 7, 'c2': 7, 'd2': 7, 'e2': 7, 'f2': 7, 'g2': 7, 'h2': 7, 'a3': (5, 0), 'b3': 7, 'c3': 7,
-                      'd3': 7, 'e3': 7, 'f3': 7, 'g3': 7, 'h3': 7, 'a4': 7, 'b4': 7, 'c4': 7, 'd4': 7, 'e4': 7, 'f4': 7,
-                      'g4': 7, 'h4': 7, 'a5': 7, 'b5': 7, 'c5': 7, 'd5': 7, 'e5': 7, 'f5': 7, 'g5': 7, 'h5': 7, 'a6': 7,
-                      'b6': 7, 'c6': 7, 'd6': 7, 'e6': 7, 'f6': 7, 'g6': 7, 'h6': 7, 'a7': 7, 'b7': 7, 'c7': 7, 'd7': 7,
-                      'e7': 7, 'f7': 7, 'g7': 7, 'h7': 7, 'a8': 7, 'b8': 7, 'c8': 7, 'd8': 7, 'e8': 7, 'f8': 7, 'g8': 7,
-                      'h8': 7}
-        row_dict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
-        move = ''
-        if start in board_dict.values():
-            for key, value in board_dict.items():
-                if value == start:
-                    move += key
-                elif value == end:
-                    move += key
+        board_dict = {'a1': (7, 0), 'b1': (7, 1), 'c1': (7, 2), 'd1': (7, 3), 'e1': (7, 4), 'f1': (7, 5), 'g1': (7, 6), 'h1': (7, 7), 'a2': (6, 0),
+                      'b2': (6, 1), 'c2': (6, 2), 'd2': (6, 3), 'e2': (6, 4), 'f2': (6, 5), 'g2': (6, 6), 'h2': (6, 7), 'a3': (5, 0), 'b3': (5, 1), 'c3': (5, 2),
+                      'd3': (5, 3), 'e3': (5, 4), 'f3': (5, 5), 'g3': (5, 6), 'h3': (5, 7), 'a4': (4, 0), 'b4': (4, 1), 'c4': (4, 2), 'd4': (4, 3), 'e4': (4, 4), 'f4': (4, 5),
+                      'g4': (4, 6), 'h4': (4, 7), 'a5': (3, 0), 'b5': (3, 1), 'c5': (3, 2), 'd5': (3, 3), 'e5': (3, 4), 'f5': (3, 5), 'g5': (3, 6), 'h5': (3, 7), 'a6': (2, 0),
+                      'b6': (2, 1), 'c6': (2, 2), 'd6': (2, 3), 'e6': (2, 4), 'f6': (2, 5), 'g6': (2, 6), 'h6': (2, 7), 'a7': (1, 0), 'b7': (1, 1), 'c7': (1, 2), 'd7': (1, 3),
+                      'e7': (1, 4), 'f7': (1, 5), 'g7': (1, 6), 'h7': (1, 7), 'a8': (0, 0), 'b8': (0, 1), 'c8': (0, 2), 'd8': (0, 3), 'e8': (0, 4), 'f8': (0, 5), 'g8': (0, 6),
+                      'h8': (0, 7)}
+        #row_dict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
+        move_start = ''
+        move_end = ''
+        for key, value in board_dict.items():
+            if value == start:
+                move_start += key
+            elif value == end:
+                move_end += key
+        move = move_start + move_end
         return move
+
+    def is_check(self):
+        pass
 
 
 class Move:
@@ -92,9 +132,10 @@ def main():
                 print(sq_selected, moves)
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
-                    print(f'{start[0]} s')
+                    #print(f'{start[0]} s')
                     end = moves[1]
                     gamestate.make_move(start, end)
+
                     sq_selected = ()
                     moves = []
 

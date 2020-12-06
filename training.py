@@ -3,13 +3,12 @@ import chess
 
 #print(chess.svg.piece(chess.Piece.from_symbol("R")))
 board = chess.Board()
-print(board.turn)
-print(board.fullmove_number)
 
 
 
-move = chess.Move(start, end)
-move1 = chess.Move.from_uci('a7a6')
+
+
+move1 = chess.Move.from_uci('a2a3')
 
 print(board.legal_moves)
 '''print(move in board.legal_moves)'''
@@ -17,14 +16,17 @@ print(board.legal_moves)
     board.push(move)'''
 if move1 in board.legal_moves:
     board.push(move1)
+
+move2 = chess.Move.from_uci('a7a6')
+print(board.is_legal(move2))
+if move2 in board.legal_moves:
+    board.push(move2)
 print(board)
 print(board.legal_moves)
-print(board.is_legal(move1))
+
 print(board.is_valid())
-print(board.fullmove_number)
-print(board.turn)
-print(chess.A1)
-print(board.peek())
+
+
 
 '''
 >>> board = chess.Board()
