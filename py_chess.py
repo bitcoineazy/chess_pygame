@@ -62,6 +62,15 @@ class ChessEngine:
                 print('нету в списке легал')
                 print(self.chess_table.legal_moves)
         else:
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            text_game_over = font.render('Game over', False, (0, 255, 0), (0, 0, 128))
+            textRect = text_game_over.get_rect()
+            textRect.center = (width // 2, height // 2)
+            print(textRect)
+            screen = pygame.display.set_mode((width, height))
+            screen.fill((0, 0, 0))
+            pygame.draw.rect(self.screen, (0, 0, 0), text.get_rect())
+            screen.blit(text_game_over, textRect)
             print('Игра окончена')
 
     def notation(self, start, end):
@@ -102,14 +111,17 @@ def main():
     screen.fill(pygame.Color('white'))
     gamestate = ChessEngine()
     loadimage()
+
     running = True
     sq_selected = () # выбранная область
     moves = [] #[(x,y),(x,y)] - координаты хода
+
     while running:
-        for i in pygame.event.get():
-            if i.type == pygame.QUIT:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
-            elif i.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos() # (x,y)
                 column = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
@@ -128,12 +140,14 @@ def main():
 
                     sq_selected = ()
                     moves = []
-
+            elif event.type == pygame.KEYDOWN:
+                pass
 
 
         draw_game(screen, gamestate)
         clock.tick(fps)
         pygame.display.flip()
+
 
 def draw_game(screen, gamestate):
     draw_squares(screen)
