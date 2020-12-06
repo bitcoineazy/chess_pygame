@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import chess
+import os
 
 width = height = 512
 dimension = 8
@@ -93,6 +94,9 @@ class Move:
 
 def main():
     pygame.init()
+    chess_icon = pygame.image.load(os.path.join('chess_icon.png'))
+    pygame.display.set_icon(chess_icon)
+    pygame.display.set_caption('Chess')
     screen = pygame.display.set_mode((width, height))
     clock = pygame.time.Clock()
     screen.fill(pygame.Color('white'))
