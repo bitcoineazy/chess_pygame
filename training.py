@@ -38,4 +38,5 @@ True
 >>> move in board.legal_moves
 True
 '''
+print(type(board))
 

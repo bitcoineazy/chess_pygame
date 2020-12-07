@@ -30,11 +30,6 @@ class ChessEngine:
         self.move_log = []
         self.chess = []
         self.chess_table = chess.Board()
-        self.chess_table.turn = True
-
-
-
-
 
 
     def make_move(self, start, end):
@@ -53,7 +48,10 @@ class ChessEngine:
             if uci_move_1 in self.chess_table.legal_moves:
                 if not self.chess_table.is_castling(uci_move_1):
                     self.board[start_row][start_column] = '--'
+
+
                 self.board[end_row][end_column] = piece_moved
+
                 #print(self.notation(start, end))
                 self.move_log.append(self.notation(start, end))
                 print(self.move_log)
@@ -62,15 +60,6 @@ class ChessEngine:
                 print('нету в списке легал')
                 print(self.chess_table.legal_moves)
         else:
-            font = pygame.font.Font('freesansbold.ttf', 32)
-            text_game_over = font.render('Game over', False, (0, 255, 0), (0, 0, 128))
-            textRect = text_game_over.get_rect()
-            textRect.center = (width // 2, height // 2)
-            print(textRect)
-            screen = pygame.display.set_mode((width, height))
-            screen.fill((0, 0, 0))
-            pygame.draw.rect(self.screen, (0, 0, 0), text.get_rect())
-            screen.blit(text_game_over, textRect)
             print('Игра окончена')
 
     def notation(self, start, end):
@@ -95,10 +84,6 @@ class ChessEngine:
     def is_check(self):
         pass
 
-
-class Move:
-    def __init__(self):
-        pass
 
 
 def main():
@@ -143,7 +128,6 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 pass
 
-
         draw_game(screen, gamestate)
         clock.tick(fps)
         pygame.display.flip()
@@ -151,11 +135,10 @@ def main():
 
 def draw_game(screen, gamestate):
     draw_squares(screen)
-
     draw_pieces(screen, gamestate.board)
 
 def draw_squares(screen):
-    colors = [pygame.Color('white'), pygame.Color('gray')]
+    colors = [pygame.Color('beige'), pygame.Color(255, 136, 0)]
     for i in range(dimension):
         for z in range(dimension):
             color = colors[((i+z) % 2)]
