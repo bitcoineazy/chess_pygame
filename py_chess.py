@@ -7,6 +7,7 @@ width = height = 512
 dimension = 8
 SQ_SIZE = height // dimension
 fps = 30
+
 images = {}
 
 def loadimage():

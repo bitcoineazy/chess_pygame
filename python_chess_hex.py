@@ -3,11 +3,12 @@ import numpy as np
 import chess
 import os
 
-width = height = 512
+width = height = 1001
 dimension = 8
 SQ_SIZE = height // dimension
 fps = 30
 images = {}
+#сделать массив фигур и нарисовать их
 
 def loadimage():
     figures = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
@@ -17,6 +18,28 @@ def loadimage():
 
 class ChessEngine:
     def __init__(self):
+        hex_1 = ['bB']
+        hex_2 = ['bQ', 'bK']
+        hex_3 = ['bR', 'bB', 'bR']
+        hex_4 = ['bp', 'bN', 'bN', 'bp']
+        hex_5 = ['--', 'bp', 'bB', 'bp', '--']
+        hex_6 = ['--', '--', 'bp', 'bp', '--', '--']
+        hex_7 = ['--', '--', 'bp', '--', '--', '--']
+        hex_8 = ['--' for i in range(6)]
+        hex_9 = ['--' for i in range(5)]
+        hex_10 = ['--' for i in range(6)]
+        hex_11 = ['--' for i in range(5)]
+        hex_12 = ['--' for i in range(6)]
+        hex_13 = ['--' for i in range(5)]
+        hex_14 = ['--' for i in range(6)]
+        hex_15 = ['--', '--', 'wp', '--', '--', '--']
+        hex_16 = ['--', '--', 'wp', 'wp', '--', '--']
+        hex_17 = ['--', 'wp', 'wB', 'wp', '--']
+        hex_18 = ['wp', 'wN', 'wN', 'wp']
+        hex_19 = ['wR', 'wB', 'wR']
+        hex_20 = ['wQ', 'wK']
+        hex_21 = ['wB']
+
         white_pieces = ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
         white_pawns = ['wp' for i in range(8)]
         black_pawns = ['bp' for i in range(8)]
@@ -135,14 +158,34 @@ def main():
 
 def draw_game(screen, gamestate):
     draw_squares(screen)
-    draw_pieces(screen, gamestate.board)
+    #draw_pieces(screen, gamestate.board)
 
 def draw_squares(screen):
-    colors = [pygame.Color('beige'), pygame.Color(255, 136, 0)]
+    pygame.draw.polygon(screen, pygame.Color('black'),
+                        [[477.5, 0], [455, 22.5],
+                         [477.5, 45], [522.5, 45],
+                         [545, 22.5], [522.5, 0]])
+    WHITE = (255, 255, 255)
+
+    hex_unit = 22.5
+    r1 = pygame.Rect((150, 20, 100, 75))
+    colors = [pygame.Color('beige'), pygame.Color(255, 136, 0), pygame.Color('red')]
+    pygame.draw.rect(screen, WHITE, (20, 20, 100, 75))
+    pygame.draw.line(screen, WHITE,
+                     [10, 30],
+                     [290, 15], 3)
+    for x in range(11):
+        for y in range(11):
+                color = colors[((y+z) % 3)]
+                pygame.draw.polygon(screen, color,
+                                    [[477.5+x*hex_unit, 0+y*hex_unit], [455+x*hex_unit, 22.5+y*hex_unit],
+                                     [477.5+x*hex_unit, 45+y*hex_unit], [522.5+x*hex_unit, 45+y*hex_unit],
+                                     [545+x*hex_unit, 22.5+y*hex_unit], [522.5+x*hex_unit, 0+x*hex_unit]])
+    '''colors = [pygame.Color('beige'), pygame.Color(255, 136, 0)]
     for i in range(dimension):
         for z in range(dimension):
             color = colors[((i+z) % 2)]
-            pygame.draw.rect(screen, color, pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+            pygame.draw.rect(screen, color, pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))'''
 
 def draw_pieces(screen, board):
     for i in range(dimension):
