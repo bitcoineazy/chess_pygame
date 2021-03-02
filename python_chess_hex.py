@@ -160,11 +160,24 @@ def draw_game(screen, gamestate):
     draw_squares(screen)
     #draw_pieces(screen, gamestate.board)
 
+
+class Hexagons:
+    def __init__(self, xc, yc, st):
+        self.xc = xc  # координата центра на оси абсцисс
+        self.yc = yc  # координата центра на оси ординат
+
+        self.st = st  # размер под ключ
+        self.r = st / 2  # радиус вписанной окружности
+        self.R = st / pow(3, .5)  # радиус описанной окружности
+        self.a = self.R  # сторона шестиугольника
+        self.points = [(self.xc + self.a / 2, self.yc + self.r),  # массив координат вершин
+                       (self.xc + self.R, self.yc),
+                       (self.xc + self.a / 2, self.yc - self.r),
+                       (self.xc - self.a / 2, self.yc - self.r),
+                       (self.xc - self.R, self.yc),
+                       (self.xc - self.a / 2, self.yc + self.r)]
+
 def draw_squares(screen):
-    pygame.draw.polygon(screen, pygame.Color('black'),
-                        [[477.5, 0], [455, 22.5],
-                         [477.5, 45], [522.5, 45],
-                         [545, 22.5], [522.5, 0]])
     WHITE = (255, 255, 255)
 
     hex_unit = 22.5
@@ -174,13 +187,65 @@ def draw_squares(screen):
     pygame.draw.line(screen, WHITE,
                      [10, 30],
                      [290, 15], 3)
-    for x in range(11):
-        for y in range(11):
-                color = colors[((y+z) % 3)]
-                pygame.draw.polygon(screen, color,
-                                    [[477.5+x*hex_unit, 0+y*hex_unit], [455+x*hex_unit, 22.5+y*hex_unit],
-                                     [477.5+x*hex_unit, 45+y*hex_unit], [522.5+x*hex_unit, 45+y*hex_unit],
-                                     [545+x*hex_unit, 22.5+y*hex_unit], [522.5+x*hex_unit, 0+x*hex_unit]])
+    start_cord = (500, 500)
+    for part_1 in range(6):
+        color = colors[((part_1) % 3)]
+        hexagon_1 = Hexagons(500-(part_1*52), 900-(part_1*30), 60)
+        pygame.draw.polygon(screen, color, hexagon_1.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
+    for part_2 in range(7):
+        color = colors[((part_2 + 1) % 3)]
+        hexagon_2 = Hexagons(552 - (part_2 * 52), 870 - (part_2 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_2.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
+    for part_3 in range(8):
+        color = colors[((part_3 + 2) % 3)]
+        hexagon_3 = Hexagons(604 - (part_3 * 52), 840 - (part_3 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_3.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_3.points)
+    for part_4 in range(9):
+        color = colors[((part_4 + 3) % 3)]
+        hexagon_4 = Hexagons(656 - (part_4 * 52), 810 - (part_4 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_4.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_4.points)
+    for part_5 in range(10):
+        color = colors[((part_5 + 4) % 3)]
+        hexagon_5 = Hexagons(708 - (part_5 * 52), 780 - (part_5 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_5.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_5.points)
+    for part_6 in range(11):
+        color = colors[((part_6 + 5) % 3)]
+        hexagon_6 = Hexagons(760 - (part_6 * 52), 750 - (part_6 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_6.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_6.points)
+    for part_7 in range(10):
+        color = colors[((part_7 + 7) % 3)]
+        hexagon_7 = Hexagons(760 - (part_7 * 52), 690 - (part_7 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_7.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_7.points)
+    for part_8 in range(9):
+        color = colors[((part_8) % 3)]
+        hexagon_8 = Hexagons(760 - (part_8 * 52), 630 - (part_8 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_8.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_8.points)
+    for part_9 in range(8):
+        color = colors[((part_9 + 2) % 3)]
+        hexagon_9 = Hexagons(760 - (part_9 * 52), 570 - (part_9 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_9.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_9.points)
+    for part_10 in range(7):
+        color = colors[((part_10 + 1) % 3)]
+        hexagon_10 = Hexagons(760 - (part_10 * 52), 510 - (part_10 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_10.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_10.points)
+    for part_11 in range(6):
+        color = colors[((part_11) % 3)]
+        hexagon_11 = Hexagons(760 - (part_11 * 52), 450 - (part_11 * 30), 60)
+        pygame.draw.polygon(screen, color, hexagon_11.points)
+        pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_11.points)
+
+
+
     '''colors = [pygame.Color('beige'), pygame.Color(255, 136, 0)]
     for i in range(dimension):
         for z in range(dimension):
@@ -193,6 +258,8 @@ def draw_pieces(screen, board):
             piece = board[i][z]
             if piece != '--':
                 screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)) #блиттинг (копирование битов) изображения в опр позицию
+
+
 
 '''def chess_lib(square, moves):
     board = chess.Board()
