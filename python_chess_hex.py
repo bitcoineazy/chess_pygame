@@ -3,7 +3,8 @@ import numpy as np
 import chess
 import os
 
-width = height = 1080
+height = 990
+width = 900
 dimension = 8
 SQ_SIZE = height // dimension
 fps = 30
@@ -18,53 +19,37 @@ def loadimage():
 
 class ChessEngine:
     def __init__(self):
-        hex_1 = ['bB']
-        hex_2 = ['bQ', 'bK']
-        hex_3 = ['bR', 'bB', 'bR']
-        hex_4 = ['bp', 'bN', 'bN', 'bp']
-        hex_5 = ['--', 'bp', 'bB', 'bp', '--']
-        hex_6 = ['--', '--', 'bp', 'bp', '--', '--']
-        hex_7 = ['--', '--', 'bp', '--', '--', '--']
-        hex_8 = ['--' for i in range(6)]
-        hex_9 = ['--' for i in range(5)]
-        hex_10 = ['--' for i in range(6)]
-        hex_11 = ['--' for i in range(5)]
-        hex_12 = ['--' for i in range(6)]
-        hex_13 = ['--' for i in range(5)]
-        hex_14 = ['--' for i in range(6)]
-        hex_15 = ['--', '--', 'wp', '--', '--', '--']
-        hex_16 = ['--', '--', 'wp', 'wp', '--', '--']
-        hex_17 = ['--', 'wp', 'wB', 'wp', '--']
-        hex_18 = ['wp', 'wN', 'wN', 'wp']
-        hex_19 = ['wR', 'wB', 'wR']
-        hex_20 = ['wQ', 'wK']
-        hex_21 = ['wB']
+        hex_1 = ['wB', 'wQ', 'wN', 'wR', 'wp', '--']
+        hex_2 = ['wK', 'wB', '--', '--', 'wp', '--', '--']
+        hex_3 = ['wN', '--', 'wB', '--', 'wp', '--', '--', '--']
+        hex_4 = ['wR', '--', '--', '--', 'wp', '--', '--', '--', '--']
+        hex_5 = ['wp', 'wp', 'wp', 'wp', 'wp', '--', '--', '--', '--', '--']
+        hex_6 = ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--', '--']
+        hex_7 = ['--', '--', '--', '--', '--', 'bp', 'bp', 'bp', 'bp', 'bp']
+        hex_8 = ['--', '--', '--', '--', 'bp', '--', '--', '--', 'bR']
+        hex_9 = ['--', '--', '--', 'bp', '--', 'bB', '--', 'bN']
+        hex_10 = ['--', '--', 'bp', '--', '--', 'bB', 'bQ']
+        hex_11 = ['--', 'bp', 'bR', 'bN', 'bK', 'bB']
 
-        white_pieces = ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
-        white_pawns = ['wp' for i in range(8)]
-        black_pawns = ['bp' for i in range(8)]
-        blank1 = ['--' for i in range(8)]
-        blank2 = ['--' for i in range(8)]
-        blank3 = ['--' for i in range(8)]
-        blank4 = ['--' for i in range(8)]
-        black_pieces = ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR']
+
         #self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
-        self.board = [black_pieces, black_pawns, blank1, blank2, blank3, blank4, white_pawns, white_pieces]
+        self.board = [hex_1, hex_2, hex_3, hex_4, hex_5, hex_6, hex_7, hex_8, hex_9, hex_10, hex_11]
         self.move_log = []
         self.chess = []
+        self.recorded_centers_of_hexagons = {}
         self.chess_table = chess.Board()
 
 
     def make_move(self, start, end):
         #board = chess.Board()
         #print(board, start, end)
-        uci_move_1 = chess.Move.from_uci(self.notation(start, end))
+        #uci_move_1 = chess.Move.from_uci(self.notation(start, end))
         print(self.notation(start, end))
         start_row = start[0]
         start_column = start[1]
         end_row = end[0]
         end_column = end[1]
-        piece_moved = self.board[start_row][start_column]
+        #piece_moved = self.board[start_row][start_column]
         #piece_captured = self.board[end_row][end_column]
         '''if not self.chess_table.is_game_over(claim_draw=True):
             
@@ -98,6 +83,9 @@ class ChessEngine:
                       'a10': (0, 0), 'b10': (0, 1), 'c10': (0, 2), 'd10': (0, 3), 'e10': (0, 4), 'f10': (0, 5), 'g10': (0, 6), 'h10': (1, 7), 'i10': (0, 0), 'k10': (0, 0), 'l10': (0, 0),
                       'a11': (0, 0), 'b11': (0, 1), 'c11': (0, 2), 'd11': (0, 3), 'e11': (0, 4), 'f11': (0, 5), 'g11': (0, 6), 'h11': (1, 7), 'i11': (0, 0), 'k11': (0, 0), 'l11': (0, 0),
                       }
+        board_dict_1 = {}
+        hex_notation_1 = ['f1', 'e1', 'd1', 'c1', 'b1', 'a1']
+
         #row_dict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
         move_start = ''
         move_end = ''
@@ -111,6 +99,24 @@ class ChessEngine:
 
     def is_check(self):
         pass
+
+    def define_nearest_hex(self, coords):
+        difference_x = []
+        difference_y = []
+        print(coords)
+        print(self.recorded_centers_of_hexagons.values())
+        for key in self.recorded_centers_of_hexagons.values():
+            difference_x.append(abs(key[0]- coords[0]))
+            difference_y.append(abs(key[1]- coords[1]))
+        minimal_dist_x = min(difference_x)
+        minimal_dist_y = min(difference_y)
+        exact_hex_x = coords[0]- minimal_dist_x
+        exact_hex_y = coords[1]- minimal_dist_y
+        print(minimal_dist_x, exact_hex_x)
+        print(difference_x, difference_y)
+        print(f'Ближайший шестиугольник: ({exact_hex_x}.{exact_hex_y})')
+        #print(f'Координаты мышки:{coords[0]} . {coords[1]}'
+        #    f'Ближайший шестиугольник: ', difference_x, minimal_dist_x, exact_hex)
 
 
 
@@ -136,14 +142,18 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos() # (x,y)
-                column = location[0] // 60
-                row = location[1] // 60
+                print(gamestate.recorded_centers_of_hexagons)
+                column = location[0]
+                row = location[1]
+                offset = pygame.Surface.get_offset(screen)
+
                 if sq_selected == (row, column): #если кликлун туда же
                     sq_selected = () #очистить выбор
                     moves = [] #очистить ходы
                 else:
                     sq_selected = (row, column)
                     moves.append(sq_selected) #добавляем 1 и 2 клики
+                gamestate.define_nearest_hex(location)
                 print(sq_selected, moves)
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
@@ -162,7 +172,7 @@ def main():
 
 
 def draw_game(screen, gamestate):
-    draw_squares(screen)
+    draw_squares(screen, gamestate)
     #draw_pieces(screen, gamestate.board)
 
 
@@ -182,7 +192,7 @@ class Hexagons:
                        (self.xc - self.R, self.yc),
                        (self.xc - self.a / 2, self.yc + self.r)]
 
-def draw_squares(screen):
+def draw_squares(screen, gamestate):
     WHITE = (255, 255, 255)
 
     hex_unit = 22.5
@@ -193,59 +203,65 @@ def draw_squares(screen):
                      [10, 30],
                      [290, 15], 3)
     start_cord = (500, 500)
+
     for part_1 in range(6):
         color = colors[((part_1) % 3)]
-        hexagon_1 = Hexagons(500-(part_1*78), 1000 -(part_1*45), 90)
+        hexagon_1 = Hexagons(450-(part_1*78), 945 - (part_1*45), 90)
         pygame.draw.polygon(screen, color, hexagon_1.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_1}hex':[(450-part_1*78), 945 - (part_1*45)]})
     for part_2 in range(7):
         color = colors[((part_2 + 1) % 3)]
-        hexagon_2 = Hexagons(578 - (part_2 * 78), 955 - (part_2 * 45), 90)
+        hexagon_2 = Hexagons(528 - (part_2 * 78), 900 - (part_2 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_2.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_2}hex': [(450 - part_2 * 78), 945 - (part_2 * 45)]})
     for part_3 in range(8):
         color = colors[((part_3 + 2) % 3)]
-        hexagon_3 = Hexagons(656 - (part_3 * 78), 910 - (part_3 * 45), 90)
+        hexagon_3 = Hexagons(606 - (part_3 * 78), 855 - (part_3 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_3.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_3.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_3}hex': [(450 - part_3 * 78), 945 - (part_3 * 45)]})
     for part_4 in range(9):
         color = colors[((part_4 + 3) % 3)]
-        hexagon_4 = Hexagons(734 - (part_4 * 78), 865 - (part_4 * 45), 90)
+        hexagon_4 = Hexagons(684 - (part_4 * 78), 810 - (part_4 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_4.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_4.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_4}hex': [(450 - part_4 * 78), 945 - (part_4 * 45)]})
     for part_5 in range(10):
         color = colors[((part_5 + 4) % 3)]
-        hexagon_5 = Hexagons(812 - (part_5 * 78), 820 - (part_5 * 45), 90)
+        hexagon_5 = Hexagons(762 - (part_5 * 78), 765 - (part_5 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_5.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_5.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_5}hex': [(450 - part_5 * 78), 945 - (part_5 * 45)]})
     for part_6 in range(11):
         color = colors[((part_6 + 5) % 3)]
-        hexagon_6 = Hexagons(890 - (part_6 * 78), 775 - (part_6 * 45), 90)
+        hexagon_6 = Hexagons(840 - (part_6 * 78), 720 - (part_6 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_6.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_6.points)
     for part_7 in range(10):
         color = colors[((part_7 + 7) % 3)]
-        hexagon_7 = Hexagons(890 - (part_7 * 78), 685 - (part_7 * 45), 90)
+        hexagon_7 = Hexagons(840 - (part_7 * 78), 630 - (part_7 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_7.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_7.points)
     for part_8 in range(9):
         color = colors[((part_8) % 3)]
-        hexagon_8 = Hexagons(890 - (part_8 * 78), 595 - (part_8 * 45), 90)
+        hexagon_8 = Hexagons(840 - (part_8 * 78), 540 - (part_8 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_8.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_8.points)
     for part_9 in range(8):
         color = colors[((part_9 + 2) % 3)]
-        hexagon_9 = Hexagons(890 - (part_9 * 78), 505 - (part_9 * 45), 90)
+        hexagon_9 = Hexagons(840 - (part_9 * 78), 450 - (part_9 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_9.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_9.points)
     for part_10 in range(7):
         color = colors[((part_10 + 1) % 3)]
-        hexagon_10 = Hexagons(890 - (part_10 * 78), 415 - (part_10 * 45), 90)
+        hexagon_10 = Hexagons(840 - (part_10 * 78), 360 - (part_10 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_10.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_10.points)
     for part_11 in range(6):
         color = colors[((part_11) % 3)]
-        hexagon_11 = Hexagons(890 - (part_11 * 78), 325 - (part_11 * 45), 90)
+        hexagon_11 = Hexagons(840 - (part_11 * 78), 270 - (part_11 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_11.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_11.points)
 
