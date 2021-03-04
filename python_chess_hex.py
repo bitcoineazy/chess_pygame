@@ -100,18 +100,28 @@ class ChessEngine:
     def is_check(self):
         pass
 
-    def define_nearest_hex(self, coords):
+    def get_nearest_value(self, n_value, n_list): #получение координат ближайшего шестиугольника от клика мышки
+        list_of_diffs = [abs(n_value - x) for x in n_list]
+        result_index = list_of_difs.index(min(list_of_difs))
+        return n_list[result_index], result_index
+
+    def define_nearest_hex(self, coords): #получение координат ближайшего шестиугольника от клика мышки
         difference_x = []
         difference_y = []
-        print(coords)
-        print(self.recorded_centers_of_hexagons.values())
+        print(coords[0])
         for key in self.recorded_centers_of_hexagons.values():
-            difference_x.append(abs(key[0]- coords[0]))
-            difference_y.append(abs(key[1]- coords[1]))
+            difference_x.append(int(abs(key[0]- coords[0])))
+            difference_y.append(int(abs(key[1]- coords[1])))
+        x_coords = []
+        for each in self.recorded_centers_of_hexagons.values():
+            x_coords.append(each[0])
+        print(x_coords)
+        print('Координата x ближ шестиугольника: ')
+        print(self.get_nearest_value(coords[0], x_coords)[0])
         minimal_dist_x = min(difference_x)
         minimal_dist_y = min(difference_y)
-        exact_hex_x = coords[0]- minimal_dist_x
-        exact_hex_y = coords[1]- minimal_dist_y
+        exact_hex_x = coords[0] - minimal_dist_x
+        exact_hex_y = coords[1] - minimal_dist_y
         print(minimal_dist_x, exact_hex_x)
         print(difference_x, difference_y)
         print(f'Ближайший шестиугольник: ({exact_hex_x}.{exact_hex_y})')
@@ -209,61 +219,67 @@ def draw_squares(screen, gamestate):
         hexagon_1 = Hexagons(450-(part_1*78), 945 - (part_1*45), 90)
         pygame.draw.polygon(screen, color, hexagon_1.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
-        gamestate.recorded_centers_of_hexagons.update({f'{part_1}hex':[(450-part_1*78), 945 - (part_1*45)]})
+        gamestate.recorded_centers_of_hexagons.update({f'{part_1}hex':[(450-(part_1*78)), 945 - (part_1*45)]})
     for part_2 in range(7):
         color = colors[((part_2 + 1) % 3)]
         hexagon_2 = Hexagons(528 - (part_2 * 78), 900 - (part_2 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_2.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
-        gamestate.recorded_centers_of_hexagons.update({f'{part_2}hex': [(450 - part_2 * 78), 945 - (part_2 * 45)]})
+        gamestate.recorded_centers_of_hexagons.update({f'{part_2+6}hex': [(528 - (part_2 * 78)), 900 - (part_2 * 45)]})
     for part_3 in range(8):
         color = colors[((part_3 + 2) % 3)]
         hexagon_3 = Hexagons(606 - (part_3 * 78), 855 - (part_3 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_3.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_3.points)
-        gamestate.recorded_centers_of_hexagons.update({f'{part_3}hex': [(450 - part_3 * 78), 945 - (part_3 * 45)]})
+        gamestate.recorded_centers_of_hexagons.update({f'{part_3+13}hex': [(606 - (part_3 * 78)), 855 - (part_3 * 45)]})
     for part_4 in range(9):
         color = colors[((part_4 + 3) % 3)]
         hexagon_4 = Hexagons(684 - (part_4 * 78), 810 - (part_4 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_4.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_4.points)
-        gamestate.recorded_centers_of_hexagons.update({f'{part_4}hex': [(450 - part_4 * 78), 945 - (part_4 * 45)]})
+        gamestate.recorded_centers_of_hexagons.update({f'{part_4+21}hex': [(684 - part_4 * 78), 810 - (part_4 * 45)]})
     for part_5 in range(10):
         color = colors[((part_5 + 4) % 3)]
         hexagon_5 = Hexagons(762 - (part_5 * 78), 765 - (part_5 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_5.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_5.points)
-        gamestate.recorded_centers_of_hexagons.update({f'{part_5}hex': [(450 - part_5 * 78), 945 - (part_5 * 45)]})
+        gamestate.recorded_centers_of_hexagons.update({f'{part_5+30}hex': [(762 - part_5 * 78), 765 - (part_5 * 45)]})
     for part_6 in range(11):
         color = colors[((part_6 + 5) % 3)]
         hexagon_6 = Hexagons(840 - (part_6 * 78), 720 - (part_6 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_6.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_6.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_6+41}hex': [(840 - part_6 * 78), 720 - (part_6 * 45)]})
     for part_7 in range(10):
         color = colors[((part_7 + 7) % 3)]
         hexagon_7 = Hexagons(840 - (part_7 * 78), 630 - (part_7 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_7.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_7.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_7+51}hex': [(840 - part_7 * 78), 630 - (part_7 * 45)]})
     for part_8 in range(9):
         color = colors[((part_8) % 3)]
         hexagon_8 = Hexagons(840 - (part_8 * 78), 540 - (part_8 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_8.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_8.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_8+60}hex': [(840 - part_8 * 78), 540 - (part_8 * 45)]})
     for part_9 in range(8):
         color = colors[((part_9 + 2) % 3)]
         hexagon_9 = Hexagons(840 - (part_9 * 78), 450 - (part_9 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_9.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_9.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_9+68}hex': [(840 - part_9 * 78), 450 - (part_9 * 45)]})
     for part_10 in range(7):
         color = colors[((part_10 + 1) % 3)]
         hexagon_10 = Hexagons(840 - (part_10 * 78), 360 - (part_10 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_10.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_10.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_10+75}hex': [(840 - part_10 * 78), 360 - (part_10 * 45)]})
     for part_11 in range(6):
         color = colors[((part_11) % 3)]
         hexagon_11 = Hexagons(840 - (part_11 * 78), 270 - (part_11 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_11.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_11.points)
+        gamestate.recorded_centers_of_hexagons.update({f'{part_11+81}hex': [(840 - part_11 * 78), 270 - (part_11 * 45)]})
 
 
 
