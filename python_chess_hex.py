@@ -100,33 +100,23 @@ class ChessEngine:
     def is_check(self):
         pass
 
-    def get_nearest_value(self, n_value, n_list): #получение координат ближайшего шестиугольника от клика мышки
+    def get_nearest_value(self, n_value, n_list): #получение ближайшего значения к n_value из списка n_list
         list_of_diffs = [abs(n_value - x) for x in n_list]
-        result_index = list_of_difs.index(min(list_of_difs))
-        return n_list[result_index], result_index
+        result_index = list_of_diffs.index(min(list_of_diffs))
+        return n_list[result_index]
 
     def define_nearest_hex(self, coords): #получение координат ближайшего шестиугольника от клика мышки
-        difference_x = []
-        difference_y = []
-        print(coords[0])
-        for key in self.recorded_centers_of_hexagons.values():
-            difference_x.append(int(abs(key[0]- coords[0])))
-            difference_y.append(int(abs(key[1]- coords[1])))
-        x_coords = []
+        x_coords = [] #x_координаты центров всех шестиугольников
+        y_coords = [] #y_координаты центров всех шестиугольников
         for each in self.recorded_centers_of_hexagons.values():
             x_coords.append(each[0])
-        print(x_coords)
-        print('Координата x ближ шестиугольника: ')
-        print(self.get_nearest_value(coords[0], x_coords)[0])
-        minimal_dist_x = min(difference_x)
-        minimal_dist_y = min(difference_y)
-        exact_hex_x = coords[0] - minimal_dist_x
-        exact_hex_y = coords[1] - minimal_dist_y
-        print(minimal_dist_x, exact_hex_x)
-        print(difference_x, difference_y)
-        print(f'Ближайший шестиугольник: ({exact_hex_x}.{exact_hex_y})')
-        #print(f'Координаты мышки:{coords[0]} . {coords[1]}'
-        #    f'Ближайший шестиугольник: ', difference_x, minimal_dist_x, exact_hex)
+            y_coords.append(each[1])
+        #print(x_coords, y_coords)
+        print('Координата x,y ближ шестиугольника: ')
+        print(self.get_nearest_value(coords[0], x_coords))
+        print(self.get_nearest_value(coords[1], x_coords))
+
+
 
 
 
