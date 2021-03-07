@@ -222,7 +222,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_2.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_2+7}hex': [(528 - (part_2 * 78)), 900 - (part_2 * 45)]})
-        print(hexagon_2.points)
+        #print(hexagon_2.points)
     for part_3 in range(8):
         color = colors[((part_3 + 2) % 3)]
         hexagon_3 = Hexagons(606 - (part_3 * 78), 855 - (part_3 * 45), 90)
