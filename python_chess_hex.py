@@ -36,15 +36,16 @@ class ChessEngine:
         self.chess_table = chess.Board()
         self.whiteToMove = True
         self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
-        self.notation_to_board_dict_1 = {}
+        self.notation_to_board_dict_2 = {}
+        self.notation_to_board_dict_3 = {}
+        self.notation_to_board_dict_4 = {}
+        self.notation_to_board_dict_5 = {}
+        self.notation_to_board_dict_6 = {}
+        self.notation_to_board_dict_7 = {}
+        self.notation_to_board_dict_8 = {}
+        self.notation_to_board_dict_9 = {}
+        self.notation_to_board_dict_10 = {}
+        self.notation_to_board_dict_11 = {}
         # TODO: добавить для каждого цикла словари(
 
     def make_move(self, start, end):
@@ -75,13 +76,25 @@ class ChessEngine:
         else:
             print('Игра окончена')'''
 
+    def check_dictionary_for_notation(self):
+        pass
+
     def notation_to_board(self, start, end):
         move_row = []
-        for key, value in self.notation_to_board_dict.items():
-            if value == start:
-                move_row.append(key)
-            elif value == end:
-                move_row.append(key)
+        all_notation_dicts = [[self.notation_to_board_dict_1], [self.notation_to_board_dict_2], [self.notation_to_board_dict_3],
+                              [self.notation_to_board_dict_4], [self.notation_to_board_dict_5], [self.notation_to_board_dict_6],
+                              [self.notation_to_board_dict_7], [self.notation_to_board_dict_8], [self.notation_to_board_dict_9],
+                              [self.notation_to_board_dict_10], [self.notation_to_board_dict_11]]
+        # TODO: доделать вывод нужного столбца и строки
+        for cycle in range(11):
+            dict = all_notation_dicts[cycle]
+            print(dict[cycle].items())
+            for key, value in dict[cycle].items():
+                if value == start:
+                    move_row.append(key)
+                elif value == end:
+                    move_row.append(key)
+
         print(move_row)
         #notation_to_board_dict = {self.board[0][0]}
 
@@ -167,7 +180,7 @@ def main():
                     moves.append(gamestate.define_nearest_hex(location)) #добавляем 1 и 2 координаты шестиугольника, ближайшего к курсору мыши
                 print('Кол-во шестиугольников: ', len(gamestate.recorded_centers_of_hexagons))
                 print(sq_selected, moves)
-                print(gamestate.notation_to_board_dict)
+                #print(gamestate.notation_to_board_dict)
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
                     #print(f'{start[0]} s')
@@ -221,7 +234,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_1.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_1+1}hex':[(450-(part_1*78)), 945 - (part_1*45)]})
-        gamestate.notation_to_board_dict.update({part_1:gamestate.define_nearest_hex([hexagon_1.xc,hexagon_1.yc])})
+        gamestate.notation_to_board_dict_1.update({part_1:gamestate.define_nearest_hex([hexagon_1.xc,hexagon_1.yc])})
         piece = gamestate.board[0][part_1]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][0]-42,
@@ -232,7 +245,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_2.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_2+7}hex': [(528 - (part_2 * 78)), 900 - (part_2 * 45)]})
-        gamestate.notation_to_board_dict.update({part_2: gamestate.define_nearest_hex([hexagon_2.xc, hexagon_2.yc])})
+        gamestate.notation_to_board_dict_2.update({part_2: gamestate.define_nearest_hex([hexagon_2.xc, hexagon_2.yc])})
         piece = gamestate.board[1][part_2]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_2 + 7}hex'][0] - 42,
@@ -244,7 +257,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_3.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_3.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_3+14}hex': [(606 - (part_3 * 78)), 855 - (part_3 * 45)]})
-        gamestate.notation_to_board_dict.update({part_3: gamestate.define_nearest_hex([hexagon_3.xc, hexagon_3.yc])})
+        gamestate.notation_to_board_dict_3.update({part_3: gamestate.define_nearest_hex([hexagon_3.xc, hexagon_3.yc])})
         piece = gamestate.board[2][part_3]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_3 + 14}hex'][0] - 42,
@@ -255,7 +268,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_4.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_4.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_4+22}hex': [(684 - part_4 * 78), 810 - (part_4 * 45)]})
-        gamestate.notation_to_board_dict.update({part_4: gamestate.define_nearest_hex([hexagon_4.xc, hexagon_4.yc])})
+        gamestate.notation_to_board_dict_4.update({part_4: gamestate.define_nearest_hex([hexagon_4.xc, hexagon_4.yc])})
         piece = gamestate.board[3][part_4]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_4 + 22}hex'][0] - 42,
@@ -267,7 +280,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_5.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_5.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_5+31}hex': [(762 - part_5 * 78), 765 - (part_5 * 45)]})
-        gamestate.notation_to_board_dict.update({part_5: gamestate.define_nearest_hex([hexagon_5.xc, hexagon_5.yc])})
+        gamestate.notation_to_board_dict_5.update({part_5: gamestate.define_nearest_hex([hexagon_5.xc, hexagon_5.yc])})
         piece = gamestate.board[4][part_5]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_5 + 31}hex'][0] - 42,
@@ -279,7 +292,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_6.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_6.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_6+41}hex': [(840 - part_6 * 78), 720 - (part_6 * 45)]})
-        gamestate.notation_to_board_dict.update({part_6: gamestate.define_nearest_hex([hexagon_6.xc, hexagon_6.yc])})
+        gamestate.notation_to_board_dict_6.update({part_6: gamestate.define_nearest_hex([hexagon_6.xc, hexagon_6.yc])})
         piece = gamestate.board[5][part_6]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_6 + 41}hex'][0] - 42,
@@ -291,7 +304,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_7.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_7.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_7+52}hex': [(840 - part_7 * 78), 630 - (part_7 * 45)]})
-        gamestate.notation_to_board_dict.update({part_7: gamestate.define_nearest_hex([hexagon_7.xc, hexagon_7.yc])})
+        gamestate.notation_to_board_dict_7.update({part_7: gamestate.define_nearest_hex([hexagon_7.xc, hexagon_7.yc])})
         piece = gamestate.board[6][part_7]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_7 + 52}hex'][0] - 42,
@@ -303,7 +316,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_8.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_8.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_8+62}hex': [(840 - part_8 * 78), 540 - (part_8 * 45)]})
-        gamestate.notation_to_board_dict.update({part_8: gamestate.define_nearest_hex([hexagon_8.xc, hexagon_8.yc])})
+        gamestate.notation_to_board_dict_8.update({part_8: gamestate.define_nearest_hex([hexagon_8.xc, hexagon_8.yc])})
         piece = gamestate.board[7][part_8]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_8 + 62}hex'][0] - 42,
@@ -315,7 +328,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_9.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_9.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_9+71}hex': [(840 - part_9 * 78), 450 - (part_9 * 45)]})
-        gamestate.notation_to_board_dict.update({part_9: gamestate.define_nearest_hex([hexagon_9.xc, hexagon_9.yc])})
+        gamestate.notation_to_board_dict_9.update({part_9: gamestate.define_nearest_hex([hexagon_9.xc, hexagon_9.yc])})
         piece = gamestate.board[8][part_9]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_9 + 71}hex'][0] - 42,
@@ -327,7 +340,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_10.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_10.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_10+79}hex': [(840 - part_10 * 78), 360 - (part_10 * 45)]})
-        gamestate.notation_to_board_dict.update({part_10: gamestate.define_nearest_hex([hexagon_10.xc, hexagon_10.yc])})
+        gamestate.notation_to_board_dict_10.update({part_10: gamestate.define_nearest_hex([hexagon_10.xc, hexagon_10.yc])})
         piece = gamestate.board[9][part_10]
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_10 + 79}hex'][0] - 42,
@@ -339,7 +352,7 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_11.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_11.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_11+86}hex': [(840 - part_11 * 78), 270 - (part_11 * 45)]})
-        gamestate.notation_to_board_dict.update({part_11: gamestate.define_nearest_hex([hexagon_11.xc, hexagon_11.yc])})
+        gamestate.notation_to_board_dict_11.update({part_11: gamestate.define_nearest_hex([hexagon_11.xc, hexagon_11.yc])})
         piece = gamestate.board[10][part_11]
         if piece != '--':
             screen.blit(images[piece],
