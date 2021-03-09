@@ -38,13 +38,14 @@ class ChessEngine:
         self.chess = []
         self.recorded_centers_of_hexagons = {}
         self.chess_table = chess.Board()
-
+        self.whiteToMove = True
 
     def make_move(self, start, end):
         #board = chess.Board()
         #print(board, start, end)
         #uci_move_1 = chess.Move.from_uci(self.notation(start, end))
         print(self.notation(start, end))
+        self.whiteToMove = not self.whiteToMove
         start_row = start[0]
         start_column = start[1]
         end_row = end[0]
@@ -71,9 +72,9 @@ class ChessEngine:
             print('Игра окончена')'''
 
     def notation(self, start, end):
-        board_dict = {'a1': (7, 0), 'b1': (7, 1), 'c1': (7, 2), 'd1': (7, 3), 'e1': (7, 4), 'f1': (7, 5), 'g1': (7, 6), 'h1': (7, 7), 'i1': (0, 0), 'k1': (0, 0), 'l1': (0, 0),
-                      'a2': (6, 0), 'b2': (6, 1), 'c2': (6, 2), 'd2': (6, 3), 'e2': (6, 4), 'f2': (6, 5), 'g2': (6, 6), 'h2': (6, 7), 'i2': (0, 0), 'k2': (0, 0), 'l2': (0, 0),
-                      'a3': (5, 0), 'b3': (5, 1), 'c3': (5, 2), 'd3': (5, 3), 'e3': (5, 4), 'f3': (5, 5), 'g3': (5, 6), 'h3': (5, 7), 'i3': (0, 0), 'k3': (0, 0), 'l3': (0, 0),
+        board_dict = {'a1': [60, 720], 'b1': [138, 765], 'c1': [216, 810], 'd1': [294, 855], 'e1': [372, 900], 'f1': [450, 945], 'g1': [528, 900], 'h1': [606, 855], 'i1': [684, 810], 'k1': [762, 765], 'l1': [840, 720],
+                      'a2': [60, 630], 'b2': [138, 675], 'c2': [216, 720], 'd2': [294, 765], 'e2': [372, 810], 'f2': [450, 855], 'g2': [528, 810], 'h2': [606, 765], 'i2': [684, 720], 'k2': [762, 675], 'l2': [840, 630],
+                      'a3': [60, 540], 'b3': [138, 585], 'c3': [216, 630], 'd3': [294, 675], 'e3': [372, 720], 'f3': [450, 765], 'g3': [528, 720], 'h3': [606, 675], 'i3': [684, 630], 'k3': [762, 585], 'l3': [840, 540],
                       'a4': (4, 0), 'b4': (4, 1), 'c4': (4, 2), 'd4': (4, 3), 'e4': (4, 4), 'f4': (4, 5), 'g4': (4, 6), 'h4': (4, 7), 'i4': (0, 0), 'k4': (0, 0), 'l4': (0, 0),
                       'a5': (3, 0), 'b5': (3, 1), 'c5': (3, 2), 'd5': (3, 3), 'e5': (3, 4), 'f5': (3, 5), 'g5': (3, 6), 'h5': (3, 7), 'i5': (0, 0), 'k5': (0, 0), 'l5': (0, 0),
                       'a6': (2, 0), 'b6': (2, 1), 'c6': (2, 2), 'd6': (2, 3), 'e6': (2, 4), 'f6': (2, 5), 'g6': (2, 6), 'h6': (2, 7), 'i6': (0, 0), 'k6': (0, 0), 'l6': (0, 0),
@@ -208,21 +209,29 @@ def draw_squares(screen, gamestate):
 
     for part_1 in range(6):
         color = colors[((part_1) % 3)]
-        hexagon_1 = Hexagons(450-(part_1*78), 945 - (part_1*45), 90)
+        hexagon_1 = Hexagons(450-(part_1*78), 945 - (part_1*45), 90) #90-размер
         pygame.draw.polygon(screen, color, hexagon_1.points)
-
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_1+1}hex':[(450-(part_1*78)), 945 - (part_1*45)]})
         piece = gamestate.board[0][part_1]
+
         if piece != '--':
-            screen.blit(images[piece], pygame.draw.polygon(screen, color, hexagon_1.points))
+            screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][0]-63, gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][1]-60, 0, 0)))
+
+
+
     for part_2 in range(7):
         color = colors[((part_2 + 1) % 3)]
         hexagon_2 = Hexagons(528 - (part_2 * 78), 900 - (part_2 * 45), 90)
         pygame.draw.polygon(screen, color, hexagon_2.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_2+7}hex': [(528 - (part_2 * 78)), 900 - (part_2 * 45)]})
-        #print(hexagon_2.points)
+        piece = gamestate.board[1][part_2]
+
+        if piece != '--':
+            screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_2 + 1}hex'][0] + 10,
+                                                    gamestate.recorded_centers_of_hexagons[f'{part_2 + 1}hex'][1] - 130,0,0)))
+
     for part_3 in range(8):
         color = colors[((part_3 + 2) % 3)]
         hexagon_3 = Hexagons(606 - (part_3 * 78), 855 - (part_3 * 45), 90)
@@ -287,12 +296,12 @@ def draw_squares(screen, gamestate):
             pygame.draw.rect(screen, color, pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE))'''
 
 def draw_pieces(screen, board):
-    for i in range(11):
+    ''''for i in range(11):
         for z in range(11):
             piece = board[i][z]
             if piece != '--':
-                screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)) #блиттинг (копирование битов) изображения в опр позицию
-
+                screen.blit(images[piece], pygame.Rect(z*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE)) #блиттинг (копирование битов) изображения в опр позицию'''
+    pass
 
 
 '''def chess_lib(square, moves):
