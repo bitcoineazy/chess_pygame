@@ -12,7 +12,7 @@ images = {}
 def loadimage():
     figures = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
     for role in figures:
-        images[role] = pygame.transform.scale(pygame.image.load('images/'+role+'.png'), (90, 90))
+        images[role] = pygame.transform.scale(pygame.image.load('images/'+role+'.png'), (85, 85))
 
 
 class ChessEngine:
@@ -209,12 +209,8 @@ def draw_squares(screen, gamestate):
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_1.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_1+1}hex':[(450-(part_1*78)), 945 - (part_1*45)]})
         piece = gamestate.board[0][part_1]
-
         if piece != '--':
-            screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][0]-63, gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][1]-60, 0, 0)))
-
-
-
+            screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][0]-43, gamestate.recorded_centers_of_hexagons[f'{part_1+1}hex'][1]-47, 0, 0)))
     for part_2 in range(7):
         color = colors[((part_2 + 1) % 3)]
         hexagon_2 = Hexagons(528 - (part_2 * 78), 900 - (part_2 * 45), 90)
