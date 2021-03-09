@@ -5,16 +5,14 @@ import os
 
 height = 990
 width = 900
-dimension = 8
-SQ_SIZE = height // dimension
 fps = 30
 images = {}
-#сделать массив фигур и нарисовать их
+
 
 def loadimage():
     figures = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
     for role in figures:
-        images[role] = pygame.transform.scale(pygame.image.load('images/'+role+'.png'), (SQ_SIZE, SQ_SIZE))
+        images[role] = pygame.transform.scale(pygame.image.load('images/'+role+'.png'), (90, 90))
 
 
 class ChessEngine:
@@ -84,10 +82,7 @@ class ChessEngine:
                       'e10': [372, 90], 'f10': [450, 135], 'g10': [528, 90],
                       'f11': [450, 45],
                       }
-        board_dict_1 = {}
-        hex_notation_1 = ['f1', 'e1', 'd1', 'c1', 'b1', 'a1']
 
-        #row_dict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
         move_start = ''
         move_end = ''
         for key, value in board_dict.items():
@@ -227,7 +222,6 @@ def draw_squares(screen, gamestate):
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_2.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_2+7}hex': [(528 - (part_2 * 78)), 900 - (part_2 * 45)]})
         piece = gamestate.board[1][part_2]
-
         if piece != '--':
             screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_2 + 1}hex'][0] + 10,
                                                     gamestate.recorded_centers_of_hexagons[f'{part_2 + 1}hex'][1] - 130,0,0)))
@@ -238,6 +232,10 @@ def draw_squares(screen, gamestate):
         pygame.draw.polygon(screen, color, hexagon_3.points)
         pygame.draw.aalines(screen, pygame.Color('black'), True, hexagon_3.points)
         gamestate.recorded_centers_of_hexagons.update({f'{part_3+14}hex': [(606 - (part_3 * 78)), 855 - (part_3 * 45)]})
+        piece = gamestate.board[2][part_3]
+        if piece != '--':
+            screen.blit(images[piece], pygame.Rect((gamestate.recorded_centers_of_hexagons[f'{part_3 + 1}hex'][0] + 100,
+                                                    gamestate.recorded_centers_of_hexagons[f'{part_3 + 1}hex'][1] - 150,0,0)))
     for part_4 in range(9):
         color = colors[((part_4 + 3) % 3)]
         hexagon_4 = Hexagons(684 - (part_4 * 78), 810 - (part_4 * 45), 90)
