@@ -31,6 +31,7 @@ class ChessEngine:
         #self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
         self.board = [hex_1, hex_2, hex_3, hex_4, hex_5, hex_6, hex_7, hex_8, hex_9, hex_10, hex_11]
         self.move_log = []
+        #self.moves_by_nearest_hex = []
         self.chess = []
         self.recorded_centers_of_hexagons = {}
         self.chess_table = chess.Board()
@@ -79,21 +80,33 @@ class ChessEngine:
     def check_dictionary_for_notation(self):
         pass
 
-    def notation_to_board(self, start, end):
+    def notation_to_board(self, nearest_loc):
         move_row = []
         all_notation_dicts = [[self.notation_to_board_dict_1], [self.notation_to_board_dict_2], [self.notation_to_board_dict_3],
                               [self.notation_to_board_dict_4], [self.notation_to_board_dict_5], [self.notation_to_board_dict_6],
                               [self.notation_to_board_dict_7], [self.notation_to_board_dict_8], [self.notation_to_board_dict_9],
                               [self.notation_to_board_dict_10], [self.notation_to_board_dict_11]]
         # TODO: доделать вывод нужного столбца и строки
-        for cycle in range(11):
-            dict = all_notation_dicts[cycle]
-            print(dict[cycle].items())
-            for key, value in dict[cycle].items():
-                if value == start:
-                    move_row.append(key)
-                elif value == end:
-                    move_row.append(key)
+        row = 0
+        column = 0
+
+        #dict = all_notation_dicts[cycle]
+
+
+        for key in all_notation_dicts[0:11]:
+            print(key[0])
+            print(key[0].values())
+
+            '''if self.moves_by_nearest_hex in key[0].values():
+                column += row
+                print('1')'''
+
+            row += 1
+            #break
+            # if value in (self.moves_by_nearest_hex)
+
+
+        print(f"row: {row},column: {column}")
 
         print(move_row)
         #notation_to_board_dict = {self.board[0][0]}
@@ -113,6 +126,7 @@ class ChessEngine:
                       'e10': [372, 90], 'f10': [450, 135], 'g10': [528, 90],
                       'f11': [450, 45],
                       }
+
         move_start = ''
         move_end = ''
         for key, value in board_dict.items():
@@ -178,15 +192,19 @@ def main():
                 else:
                     sq_selected = (column, row)
                     moves.append(gamestate.define_nearest_hex(location)) #добавляем 1 и 2 координаты шестиугольника, ближайшего к курсору мыши
+                    #gamestate.moves_by_nearest_hex = []
+                    #gamestate.moves_by_nearest_hex.append(gamestate.define_nearest_hex(location))
+                    gamestate.notation_to_board(gamestate.define_nearest_hex(location))
                 print('Кол-во шестиугольников: ', len(gamestate.recorded_centers_of_hexagons))
                 print(sq_selected, moves)
                 #print(gamestate.notation_to_board_dict)
+
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
                     #print(f'{start[0]} s')
                     end = moves[1]
                     gamestate.make_move(start, end)
-                    gamestate.notation_to_board(start, end)
+
                     sq_selected = ()
                     moves = []
             elif event.type == pygame.KEYDOWN:
