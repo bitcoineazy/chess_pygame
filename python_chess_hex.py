@@ -68,7 +68,7 @@ class ChessEngine:
 
     def undo_move(self):
         if self.board_full_log != 0:
-            print(self.board_full_log)
+            #print(self.board_full_log)
             end = self.board_full_log.pop() #получение последнего хода
             start = self.board_full_log.pop() #получение предпосл хода
             #print(move, 'move', move_1, 'move1')
@@ -101,6 +101,7 @@ class ChessEngine:
         #print(f"column: {column},row: {row}")
         self.board_move_log.append([column, row])
         self.board_full_log.append([column, row])
+
 
     def notation(self, start, end):
         board_dict = {'a1': [60, 720], 'b1': [138, 765], 'c1': [216, 810], 'd1': [294, 855], 'e1': [372, 900], 'f1': [450, 945], 'g1': [528, 900], 'h1': [606, 855], 'i1': [684, 810], 'k1': [762, 765], 'l1': [840, 720],
@@ -146,6 +147,22 @@ class ChessEngine:
         hexogonal_selected = [x_nearest, y_nearest]
         return hexogonal_selected
 
+    '''TODO: Найти все возможные ходы
+        Для каждого возможного хода проверить является ли он легальным выполняя след:
+        1) Сделать ход
+        2) Сгенерировать все возможные ходы для противника 
+        3) Проверить, есть ли у противника ходы, атакующие короля
+        
+        -вернуть список только легальных ходов 
+    '''
+
+
+    '''Все ходы с учётом шахов'''
+    def get_valid_moves(self):
+        pass
+    '''Все ходы без учёта шахов'''
+    def get_all_possible_moves(self):
+        pass
 
 def main():
     pygame.init()
