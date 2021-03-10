@@ -47,7 +47,7 @@ class ChessEngine:
         self.notation_to_board_dict_9 = {}
         self.notation_to_board_dict_10 = {}
         self.notation_to_board_dict_11 = {}
-        # TODO: добавить для каждого цикла словари(
+
 
     def make_move(self, start, end):
         #board = chess.Board()
@@ -77,41 +77,28 @@ class ChessEngine:
         else:
             print('Игра окончена')'''
 
-    def check_dictionary_for_notation(self):
-        pass
 
     def notation_to_board(self, nearest_loc):
-        move_row = []
         all_notation_dicts = [[self.notation_to_board_dict_1], [self.notation_to_board_dict_2], [self.notation_to_board_dict_3],
                               [self.notation_to_board_dict_4], [self.notation_to_board_dict_5], [self.notation_to_board_dict_6],
                               [self.notation_to_board_dict_7], [self.notation_to_board_dict_8], [self.notation_to_board_dict_9],
                               [self.notation_to_board_dict_10], [self.notation_to_board_dict_11]]
-        # TODO: доделать вывод нужного столбца и строки
-        row = 0
+        '''проходимся по всем эл-м массива со словарями 11-линий отрисовки поля (ключ=строка, значение=столбец)
+        строка и столбец после хода 2-ух игроков попадает в функцию self.make_move и изменяет матрицу поля self.board
+        с заменой эл-ов массива () . Фигуры рисуются по значениям в матрице поле и любые изменения в массиве поменяют само
+        поле.           
+        '''
+        i = 0
         column = 0
-
-        #dict = all_notation_dicts[cycle]
-
-
+        row = 0
         for key in all_notation_dicts[0:11]:
-            print(key[0])
-            print(key[0].values())
-
-            '''if self.moves_by_nearest_hex in key[0].values():
-                column += row
-                print('1')'''
-
-            row += 1
-            #break
-            # if value in (self.moves_by_nearest_hex)
-
-
-        print(f"row: {row},column: {column}")
-
-        print(move_row)
-        #notation_to_board_dict = {self.board[0][0]}
-
-        pass
+            if nearest_loc in key[0].values():#узнаем в каком массиве из матрицы ближ шестиугольник к клику (номер столбца)
+                column += i
+                for key, value in key[0].items():#узнаем ключ эл-ма по значению, ключ в этом случае - номер по списку (номер строки)
+                    if value == nearest_loc:
+                        row += key
+            i += 1
+        print(f"column: {column},row: {row}")
 
     def notation(self, start, end):
         board_dict = {'a1': [60, 720], 'b1': [138, 765], 'c1': [216, 810], 'd1': [294, 855], 'e1': [372, 900], 'f1': [450, 945], 'g1': [528, 900], 'h1': [606, 855], 'i1': [684, 810], 'k1': [762, 765], 'l1': [840, 720],
