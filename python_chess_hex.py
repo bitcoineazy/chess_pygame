@@ -29,7 +29,7 @@ class ChessEngine:
         hex_10 = ['--', '--', 'bp', '--', '--', 'bB', 'bQ']
         hex_11 = ['--', 'bp', 'bR', 'bN', 'bK', 'bB']
         self.board = [hex_1, hex_2, hex_3, hex_4, hex_5, hex_6, hex_7, hex_8, hex_9, hex_10, hex_11]
-        self.move_log = []
+        self.move_log_by_notation = []
         self.chess = []
         self.recorded_centers_of_hexagons = {}
         self.chess_table = chess.Board()
@@ -45,23 +45,37 @@ class ChessEngine:
         self.notation_to_board_dict_9 = {}
         self.notation_to_board_dict_10 = {}
         self.notation_to_board_dict_11 = {}
-        self.board_moves_by_cr = [] #записанные ходы(строка, столбец) для изменения матрицы доски
+        self.board_move_log = [] #записанные ходы(строка, столбец) для изменения матрицы доски
+        self.board_full_log = [] #полная история ходов
+
+
 
     def make_move(self, start, end):
         #board = chess.Board()
         #print(board, start, end)
         #uci_move_1 = chess.Move.from_uci(self.notation(start, end))
-        print(self.notation(start, end))
-        self.move_log.append(self.notation(start, end))
+
+        self.move_log_by_notation.append(self.notation(start, end))
         self.whiteToMove = not self.whiteToMove
-        #piece_captured = self.board[end_row][end_column]
         start_row = start[1]
         start_column = start[0]
         end_row = end[1]
         end_column = end[0]
-        piece_moved = self.board[start_column][start_row]
+        self.piece_captured = self.board[end_column][end_row]
+        self.piece_moved = self.board[start_column][start_row]
         self.board[start_column][start_row] = '--'
-        self.board[end_column][end_row] = piece_moved
+        self.board[end_column][end_row] = self.piece_moved
+
+    def undo_move(self):
+        if self.board_full_log != 0:
+            print(self.board_full_log)
+            end = self.board_full_log.pop() #получение последнего хода
+            start = self.board_full_log.pop() #получение предпосл хода
+            #print(move, 'move', move_1, 'move1')
+            self.board[start[0]][start[1]] = self.piece_moved
+            self.board[end[0]][end[1]] = self.piece_captured
+            self.whiteToMove = not self.whiteToMove
+
 
     def notation_to_board(self, nearest_loc):
         all_notation_dicts = [[self.notation_to_board_dict_1], [self.notation_to_board_dict_2], [self.notation_to_board_dict_3],
@@ -84,8 +98,9 @@ class ChessEngine:
                         row += key
             i += 1
 
-        print(f"column: {column},row: {row}")
-        self.board_moves_by_cr.append([column, row])
+        #print(f"column: {column},row: {row}")
+        self.board_move_log.append([column, row])
+        self.board_full_log.append([column, row])
 
     def notation(self, start, end):
         board_dict = {'a1': [60, 720], 'b1': [138, 765], 'c1': [216, 810], 'd1': [294, 855], 'e1': [372, 900], 'f1': [450, 945], 'g1': [528, 900], 'h1': [606, 855], 'i1': [684, 810], 'k1': [762, 765], 'l1': [840, 720],
@@ -144,8 +159,8 @@ def main():
     loadimage()
 
     running = True
-    sq_selected = () # выбранная область
-    moves = [] #[(x,y),(x,y)] - координаты хода
+    sq_selected = () # выбранная область по абсолютным координатам 900*990
+    moves = [] # - координаты хода в виде ближ шестиугольника к клику мышки
 
     while running:
 
@@ -154,7 +169,7 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos() # (x,y)
-                print(gamestate.recorded_centers_of_hexagons)
+                #print(gamestate.recorded_centers_of_hexagons)
                 column = location[0]
                 row = location[1]
                 offset = pygame.Surface.get_offset(screen)
@@ -168,20 +183,21 @@ def main():
                     #gamestate.moves_by_nearest_hex = []
                     #gamestate.moves_by_nearest_hex.append(gamestate.define_nearest_hex(location))
                     gamestate.notation_to_board(gamestate.define_nearest_hex(location))
-                print(sq_selected, moves)
+                    print(gamestate.board_move_log)
+                #print(sq_selected, moves)
                 #print(gamestate.notation_to_board_dict)
 
                 if len(moves) == 2: #после хода белых и черных
                     start = moves[0]
                     #print(f'{start[0]} s')
                     end = moves[1]
-                    gamestate.make_move(gamestate.board_moves_by_cr[0], gamestate.board_moves_by_cr[1])
-
+                    print(f'Ход стороны {"Белые" if gamestate.whiteToMove else "Чёрные"} : {gamestate.notation(moves[0], moves[1])}')
+                    gamestate.make_move(gamestate.board_move_log[0], gamestate.board_move_log[1])
                     sq_selected = ()
                     moves = []
-                    gamestate.board_moves_by_cr = []
+                    gamestate.board_move_log = []
             elif event.type == pygame.KEYDOWN:
-                pass
+                gamestate.undo_move()
 
         draw_game(screen, gamestate)
         clock.tick(fps)
@@ -208,17 +224,7 @@ class Hexagons:
                        (self.xc - self.a / 2, self.yc + self.r)]
 
 def draw_squares(screen, gamestate):
-    WHITE = (255, 255, 255)
-
-    hex_unit = 22.5
-    r1 = pygame.Rect((150, 20, 100, 75))
     colors = [pygame.Color('beige'), pygame.Color(255, 136, 0), pygame.Color('red')]
-    pygame.draw.rect(screen, WHITE, (20, 20, 100, 75))
-    pygame.draw.line(screen, WHITE,
-                     [10, 30],
-                     [290, 15], 3)
-    start_cord = (500, 500)
-
     for part_1 in range(6):
         color = colors[((part_1) % 3)]
         hexagon_1 = Hexagons(450-(part_1*78), 945 - (part_1*45), 90) #90-размер
