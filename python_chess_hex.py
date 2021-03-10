@@ -28,10 +28,8 @@ class ChessEngine:
         hex_9 = ['--', '--', '--', 'bp', '--', 'bB', '--', 'bN']
         hex_10 = ['--', '--', 'bp', '--', '--', 'bB', 'bQ']
         hex_11 = ['--', 'bp', 'bR', 'bN', 'bK', 'bB']
-        #self.board = np.array([black_pieces,black_pawns,blank,blank,blank,blank,white_pawns,white_pieces])
         self.board = [hex_1, hex_2, hex_3, hex_4, hex_5, hex_6, hex_7, hex_8, hex_9, hex_10, hex_11]
         self.move_log = []
-        #self.moves_by_nearest_hex = []
         self.chess = []
         self.recorded_centers_of_hexagons = {}
         self.chess_table = chess.Board()
@@ -47,7 +45,7 @@ class ChessEngine:
         self.notation_to_board_dict_9 = {}
         self.notation_to_board_dict_10 = {}
         self.notation_to_board_dict_11 = {}
-
+        self.board_moves_by_cr = [] #записанные ходы(строка, столбец) для изменения матрицы доски
 
     def make_move(self, start, end):
         #board = chess.Board()
@@ -56,27 +54,14 @@ class ChessEngine:
         print(self.notation(start, end))
         self.move_log.append(self.notation(start, end))
         self.whiteToMove = not self.whiteToMove
-        #piece_moved = self.board[start_row][start_column]
         #piece_captured = self.board[end_row][end_column]
-        '''if not self.chess_table.is_game_over(claim_draw=True):
-            
-            if uci_move_1 in self.chess_table.legal_moves:
-                if not self.chess_table.is_castling(uci_move_1):
-                    self.board[start_row][start_column] = '--'
-
-
-                self.board[end_row][end_column] = piece_moved
-
-                #print(self.notation(start, end))
-                self.move_log.append(self.notation(start, end))
-                print(self.move_log)
-                self.chess_table.push(uci_move_1)
-            else:
-                print('нету в списке легал')
-                print(self.chess_table.legal_moves)
-        else:
-            print('Игра окончена')'''
-
+        start_row = start[1]
+        start_column = start[0]
+        end_row = end[1]
+        end_column = end[0]
+        piece_moved = self.board[start_column][start_row]
+        self.board[start_column][start_row] = '--'
+        self.board[end_column][end_row] = piece_moved
 
     def notation_to_board(self, nearest_loc):
         all_notation_dicts = [[self.notation_to_board_dict_1], [self.notation_to_board_dict_2], [self.notation_to_board_dict_3],
@@ -98,7 +83,9 @@ class ChessEngine:
                     if value == nearest_loc:
                         row += key
             i += 1
+
         print(f"column: {column},row: {row}")
+        self.board_moves_by_cr.append([column, row])
 
     def notation(self, start, end):
         board_dict = {'a1': [60, 720], 'b1': [138, 765], 'c1': [216, 810], 'd1': [294, 855], 'e1': [372, 900], 'f1': [450, 945], 'g1': [528, 900], 'h1': [606, 855], 'i1': [684, 810], 'k1': [762, 765], 'l1': [840, 720],
@@ -139,7 +126,6 @@ class ChessEngine:
         for each in self.recorded_centers_of_hexagons.values():
             x_coords.append(each[0])
             y_coords.append(each[1])
-        #print(coords)
         x_nearest = self.get_nearest_value(coords[0], x_coords)
         y_nearest = self.get_nearest_value(coords[1], y_coords)
         hexogonal_selected = [x_nearest, y_nearest]
@@ -182,7 +168,6 @@ def main():
                     #gamestate.moves_by_nearest_hex = []
                     #gamestate.moves_by_nearest_hex.append(gamestate.define_nearest_hex(location))
                     gamestate.notation_to_board(gamestate.define_nearest_hex(location))
-                print('Кол-во шестиугольников: ', len(gamestate.recorded_centers_of_hexagons))
                 print(sq_selected, moves)
                 #print(gamestate.notation_to_board_dict)
 
@@ -190,10 +175,11 @@ def main():
                     start = moves[0]
                     #print(f'{start[0]} s')
                     end = moves[1]
-                    gamestate.make_move(start, end)
+                    gamestate.make_move(gamestate.board_moves_by_cr[0], gamestate.board_moves_by_cr[1])
 
                     sq_selected = ()
                     moves = []
+                    gamestate.board_moves_by_cr = []
             elif event.type == pygame.KEYDOWN:
                 pass
 
